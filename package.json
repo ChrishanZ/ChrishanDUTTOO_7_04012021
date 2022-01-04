@@ -1,0 +1,16 @@
+{
+  "name": "7_chapitre",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "sass --watch ./sass/main.scss:./css/main.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^6.4.0",
+    "eslint": "^8.4.1",
+    "http-server": "^14.0.0"
+  }
+}

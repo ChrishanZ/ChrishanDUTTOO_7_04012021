@@ -1,0 +1,92 @@
+.search{
+    position: relative;
+    input[type="text"]{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            border-radius: 5px;
+            height: 70px;
+            background-color: $graylight;
+
+            font-size: 18px;
+            padding-left: 20px;
+            font-family: 'Lato', sans-serif;
+            border: none;
+            margin-top: 30px;
+    }
+    &::after{
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: no-repeat center center url("../images/logos/search.svg");
+        width: 33px;
+        height: 33px;
+    }
+}
+
+.tri{
+    padding-top: 40px;
+    &__elements{
+        display: flex;
+        li{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 80px;
+            height: 40px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: 'Lato', sans-serif;
+            color: $white;
+            padding: 0 20px;
+            margin: 0 10px 15px 0;
+            &::after{
+                content: "";
+                background-image: url("../images/logos/cross.svg");
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+    }
+
+    &__filters{
+        display: flex;
+        color: $white;
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        li{
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            align-items: center;
+            width: 170px;
+            height: 70px;
+            border-radius: 5px;
+            margin-right: 20px;
+            &::after{
+                content: "";
+                background-image: url("../images/logos/arrowDown.svg");
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 16px;
+                height: 10px;
+            }
+        }
+
+    }
+    .blue{
+        background-color: $blue;
+    }
+    .yellow{
+        background-color: $yellow;
+    }
+    .red{
+        background-color: $red;
+    }
+}
