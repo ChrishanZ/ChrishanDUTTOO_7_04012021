@@ -219,6 +219,24 @@ header h1 {
   height: 70px;
   border-radius: 5px;
   margin-right: 20px;
+  position: relative;
+}
+.tri__filters li label {
+  font-size: 18px;
+  font-family: "Lato", sans-serif;
+  color: #FFF;
+}
+.tri__filters li input[type=text] {
+  outline: none;
+  background: transparent;
+  border: none;
+  height: 100%;
+  font-size: 18px;
+  font-family: "Lato", sans-serif;
+  color: #FFF;
+  position: absolute;
+  left: 0;
+  padding-left: 20px;
 }
 .tri__filters li::after {
   content: "";
@@ -236,6 +254,101 @@ header h1 {
 }
 .tri .red {
   background-color: #ED6454;
+}
+
+.recette {
+  padding-top: 50px;
+}
+.recette__liste {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.recette__liste li {
+  display: flex;
+  flex-direction: column;
+  height: 364px;
+  width: 380px;
+  margin: 15px;
+  border-radius: 5px;
+}
+.recette__liste li .upper {
+  height: 50%;
+  width: 100%;
+  background: #c7bebe;
+}
+.recette__liste li .lower {
+  height: 50%;
+  width: 100%;
+  background: #e7e7e7;
+}
+.recette__liste li .lower__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+.recette__liste li .lower__header h2 {
+  font-family: "Lato", sans-serif;
+  font-size: 18px;
+}
+.recette__liste li .lower__header p {
+  font-family: "Lato", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.recette__liste li .lower__header p::before {
+  content: "";
+  background: no-repeat center center url("../images/logos/timer.svg");
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 5px;
+}
+.recette__liste li .lower__content {
+  padding: 0 20px 20px 20px;
+  display: flex;
+}
+.recette__liste li .lower__content-recipe {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 60%;
+}
+.recette__liste li .lower__content-recipe h2 {
+  font-family: "Lato", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+.recette__liste li .lower__content-recipe p {
+  font-family: "Lato", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+}
+.recette__liste li .lower__content-recipe__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.recette__liste li .lower__content-description {
+  width: 40%;
+}
+.recette__liste li .lower__content-description p {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  max-height: 7;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .container {
