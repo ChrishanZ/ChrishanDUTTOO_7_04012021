@@ -221,7 +221,7 @@ header h1 {
   margin-right: 20px;
   position: relative;
 }
-.tri__filters li label {
+.tri__filters li ::placeholder {
   font-size: 18px;
   font-family: "Lato", sans-serif;
   color: #FFF;
@@ -245,6 +245,8 @@ header h1 {
   background-position: center;
   width: 16px;
   height: 10px;
+  right: 20px;
+  position: absolute;
 }
 .tri .blue {
   background-color: #3282F7;

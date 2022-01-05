@@ -71,7 +71,7 @@
       margin-right: 20px;
       position: relative;
 
-      label {
+      ::placeholder {
         font-size: 18px;
         font-family: "Lato", sans-serif;
         color: $white;
@@ -95,6 +95,8 @@
         background-position: center;
         width: 16px;
         height: 10px;
+        right: 20px;
+        position: absolute;
       }
     }
   }

@@ -2,7 +2,7 @@ export default class Recipe {
   constructor(
     id,
     name,
-    serving,
+    servings,
     ingredients,
     time,
     ustensils,
@@ -11,7 +11,7 @@ export default class Recipe {
   ) {
     this.id = id;
     this.name = name;
-    this.serving = serving;
+    this.servings = servings;
     this.ingredients = ingredients;
     this.time = time;
     this.ustensils = ustensils;
@@ -20,8 +20,6 @@ export default class Recipe {
   }
 
   display() {
-    console.log(this.description);
-    console.log(this.ingredients);
     let li = document.createElement("li");
     let divUpper = document.createElement("div");
 
@@ -51,9 +49,9 @@ export default class Recipe {
       let h2LowerContent = document.createElement("h2");
       let pLowerContent = document.createElement("p");
 
-      h2LowerContent.textContent = `${this.ingredients[i].ingredient} :`;
+      h2LowerContent.textContent = `${this.ingredients[i].ingredient}`;
       pLowerContent.textContent = `${
-        this.ingredients[i].quantity ? this.ingredients[i].quantity : ""
+        this.ingredients[i].quantity ? ' : ' + this.ingredients[i].quantity : ""
       } ${this.ingredients[i].unit ? this.ingredients[i].unit : ""}`;
 
       divRecipeContainer.appendChild(h2LowerContent);
