@@ -21,6 +21,7 @@ export default class Recipe {
 
   display() {
     let li = document.createElement("li");
+    li.id = `${this.id}`;
     let divUpper = document.createElement("div");
 
     let divLower = document.createElement("div");
@@ -51,7 +52,7 @@ export default class Recipe {
 
       h2LowerContent.textContent = `${this.ingredients[i].ingredient}`;
       pLowerContent.textContent = `${
-        this.ingredients[i].quantity ? ' : ' + this.ingredients[i].quantity : ""
+        this.ingredients[i].quantity ? " : " + this.ingredients[i].quantity : ""
       } ${this.ingredients[i].unit ? this.ingredients[i].unit : ""}`;
 
       divRecipeContainer.appendChild(h2LowerContent);

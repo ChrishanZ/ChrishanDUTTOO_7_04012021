@@ -7,37 +7,36 @@ export default class Homepage {
     this.appareil = [];
     this.ustensils = [];
 
-    const listeRecette = document.querySelector(".recette__liste");
+    const containerRecette = document.querySelector(".recette__liste");
+    const listeRecette = containerRecette.children;
 
+    // const p = document.createElement("p");
+    // p.textContent = "debug";
+    // p.addEventListener("click", (e) => {
+    //   // console.log("ingrédients :", this.ingredients);
+    //   // console.log("appareil :", this.appareil);
+    //   // console.log("ustensils :", this.ustensils);
+    //   this.filterRecipe(this.recipes[0].ustensils);
+    //   console.log(this.recipes);
+    // });
+    // listeRecette.parentElement.appendChild(p);
 
-    const p = document.createElement("p");
-    p.textContent = "debug";
-    p.addEventListener('click' , e =>{
-      console.log("ingrédients :" , this.ingredients);
-      console.log("appareil :" , this.appareil);
-      console.log("ustensils :" , this.ustensils);
-    })
-
-    listeRecette.parentElement.appendChild(p);
     const barreRecherche = document.querySelector("#barreRecherche");
 
     barreRecherche.addEventListener("input", (e) => {
-      if (barreRecherche.value.length > 2) {
-        // for (let i = 0; i < this.ingredients.length; i++) {
-        //   if(this.ingredients[i].includes(barreRecherche.value)){
-        //     console.log('MATCH');
-        //     console.log(this.ingredients[i]);
-        //   }
-        // }
-        for (let k = 0; k < this.recipes.length; k++) {
-          console.log(this.recipes[k]);
-          
+      for (let i = 0; i < this.recipes.length; i++) {
+        if (barreRecherche.value.length > 2) {
+          if (
+            !this.recipes[i].name
+              .toLowerCase()
+              .includes(barreRecherche.value.toLowerCase())
+          ) {
+            listeRecette[i].style.display = "none";
+          }
+        } else {
+          listeRecette[i].style.display = "flex";
         }
-       
-      } else {
-        console.log("moins de 3 caractères");
       }
-      console.log(this.recipes);
     });
   }
 
@@ -48,7 +47,7 @@ export default class Homepage {
       let tabIngredients = [];
       let tabAppareil = [];
       let tabUstensils = [];
-      console.log('data', data);
+      console.log("data", data);
       data.recipes.forEach((recipe) => {
         this.recipes.push(
           new Recipe(
@@ -64,16 +63,15 @@ export default class Homepage {
         );
         for (let j = 0; j < recipe.ingredients.length; j++) {
           tabIngredients.push(recipe.ingredients[j].ingredient.toLowerCase()); // me sert à enlever les doublons avec accents et majuscules
-        }  
+        }
         tabAppareil.push(recipe.appliance.toLowerCase());
         for (let i = 0; i < recipe.ustensils.length; i++) {
           tabUstensils.push(recipe.ustensils[i].toLowerCase());
         }
-       
       });
-      this.ingredients = [... new Set(tabIngredients)];
-      this.appareil = [... new Set(tabAppareil)];
-      this.ustensils = [... new Set(tabUstensils)];
+      this.ingredients = [...new Set(tabIngredients)];
+      this.appareil = [...new Set(tabAppareil)];
+      this.ustensils = [...new Set(tabUstensils)];
 
       this.displayedRecipe = this.recipes;
     } catch (e) {
@@ -87,7 +85,9 @@ export default class Homepage {
     }
   }
 
-  // filterRecipe(text){
-
-  // }
+  filterRecipe(data) {
+    console.log(typeof data);
+    if (typeof data === "object") {
+    }
+  }
 }
