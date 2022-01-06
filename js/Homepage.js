@@ -27,10 +27,18 @@ export default class Homepage {
       for (let i = 0; i < this.recipes.length; i++) {
         if (barreRecherche.value.length > 2) {
           if (
-            !this.recipes[i].name
+            this.recipes[i].name
+              .toLowerCase()
+              .includes(barreRecherche.value.toLowerCase()) ||
+            this.recipes[i].description
+              .toLowerCase()
+              .includes(barreRecherche.value.toLowerCase()) ||
+            this.recipes[i].appliance
               .toLowerCase()
               .includes(barreRecherche.value.toLowerCase())
           ) {
+            listeRecette[i].style.display = "flex";
+          } else {
             listeRecette[i].style.display = "none";
           }
         } else {
