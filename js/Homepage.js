@@ -26,6 +26,7 @@ export default class Homepage {
     barreRecherche.addEventListener("input", (e) => {
       for (let i = 0; i < this.recipes.length; i++) {
         if (barreRecherche.value.length > 2) {
+          // this.filterWhole(barreRecherche.value, this.recipes[i]);
           if (
             this.recipes[i].name
               .toLowerCase()
@@ -70,7 +71,7 @@ export default class Homepage {
           )
         );
         for (let j = 0; j < recipe.ingredients.length; j++) {
-          tabIngredients.push(recipe.ingredients[j].ingredient.toLowerCase()); // me sert à enlever les doublons avec accents et majuscules
+          tabIngredients.push(recipe.ingredients[j].ingredient.toLowerCase()); // me sert à enlever les doublons et majuscules
         }
         tabAppareil.push(recipe.appliance.toLowerCase());
         for (let i = 0; i < recipe.ustensils.length; i++) {
@@ -93,9 +94,8 @@ export default class Homepage {
     }
   }
 
-  filterRecipe(data) {
-    console.log(typeof data);
-    if (typeof data === "object") {
-    }
+  filterWhole(string, domElem) {
+    console.log("string", string);
+    console.log("domElem", domElem);
   }
 }
