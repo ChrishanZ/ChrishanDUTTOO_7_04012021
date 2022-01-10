@@ -88,7 +88,8 @@
         left: 0;
         padding-left: 20px;
       }
-      &::after {
+      .arrowDown {
+        display: block;
         content: "";
         background-image: url("../images/logos/arrowDown.svg");
         background-repeat: no-repeat;
@@ -97,6 +98,53 @@
         height: 10px;
         right: 20px;
         position: absolute;
+        cursor: pointer;
+      }
+      .arrowUp {
+        display: none;
+        content: "";
+        background-image: url("../images/logos/arrowUp.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 16px;
+        height: 10px;
+        right: 20px;
+        position: absolute;
+        cursor: pointer;
+      }
+    }
+    &-dropdown {
+      border-radius: 5px;
+      position: absolute;
+      left: 0;
+      top: 60px;
+      width: 100%;
+
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      li {
+        &:first-child {
+          padding-top: 20px;
+        }
+        min-height: 30px;
+        padding: 0;
+        width: 170px;
+        height: inherit;
+        border-radius: 0px;
+        margin-right: 0px;
+        position: relative;
+        font-size: 18px;
+        font-family: "Lato", sans-serif;
+        color: $white;
+        font-weight: 300;
+        padding: 0px 20px 10px;
+        text-transform: capitalize;
+
+        &::after {
+          display: none;
+        }
       }
     }
   }
@@ -154,7 +202,7 @@
             &::before {
               content: "";
               background: no-repeat center center
-              url("../images/logos/timer.svg");
+                url("../images/logos/timer.svg");
               width: 25px;
               height: 25px;
               display: inline-block;

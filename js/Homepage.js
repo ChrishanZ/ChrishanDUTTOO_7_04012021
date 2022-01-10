@@ -47,6 +47,140 @@ export default class Homepage {
         }
       }
     });
+
+    const dropDownIngredientsDown = document.querySelector("#ingredientsDown");
+    const dropDownAppareilDown = document.querySelector("#appareilDown");
+    const dropDownUstensilsDown = document.querySelector("#ustensilsDown");
+    const dropDownIngredientsUp = document.querySelector("#ingredientsUp");
+    const dropDownAppareilUp = document.querySelector("#appareilUp");
+    const dropDownUstensilsUp = document.querySelector("#ustensilsUp");
+
+    const dropDownIngredientsContainer = document.querySelector(
+      "#listeTriIngredients"
+    );
+    const dropDownAppareilContainer =
+      document.querySelector("#listeTriAppareil");
+    const dropDownUstensilsContainer =
+      document.querySelector("#listeTriUstensils");
+
+    dropDownIngredientsDown.addEventListener("click", () => {
+      dropDownIngredientsDown.style.display = "none";
+      dropDownIngredientsUp.style.display = "flex";
+      dropDownAppareilDown.style.display = "flex";
+      dropDownAppareilUp.style.display = "none";
+      dropDownUstensilsDown.style.display = "flex";
+      dropDownUstensilsUp.style.display = "none";
+      dropDownIngredientsContainer.style.width = "700px";
+      dropDownIngredientsContainer.parentElement.style.width = "660px";
+
+      dropDownAppareilContainer.parentElement.style.width = "170px";
+      dropDownUstensilsContainer.parentElement.style.width = "170px";
+
+      if (dropDownUstensilsContainer.firstChild) {
+        while (dropDownUstensilsContainer.firstChild) {
+          dropDownUstensilsContainer.firstChild.remove();
+        }
+      }
+      if (dropDownAppareilContainer.firstChild) {
+        while (dropDownAppareilContainer.firstChild) {
+          dropDownAppareilContainer.firstChild.remove();
+        }
+      }
+
+      for (let i = 0; i < this.ingredients.length; i++) {
+        const li = document.createElement("li");
+        li.textContent = this.ingredients[i];
+        dropDownIngredientsContainer.appendChild(li);
+      }
+    });
+    dropDownAppareilDown.addEventListener("click", () => {
+      dropDownAppareilDown.style.display = "none";
+      dropDownAppareilUp.style.display = "flex";
+
+      dropDownIngredientsDown.style.display = "flex";
+      dropDownIngredientsUp.style.display = "none";
+      dropDownUstensilsDown.style.display = "flex";
+      dropDownUstensilsUp.style.display = "none";
+
+      dropDownAppareilContainer.style.width = "700px";
+      dropDownAppareilContainer.parentElement.style.width = "660px";
+
+      dropDownIngredientsContainer.parentElement.style.width = "170px";
+      dropDownUstensilsContainer.parentElement.style.width = "170px";
+
+      if (dropDownUstensilsContainer.firstChild) {
+        while (dropDownUstensilsContainer.firstChild) {
+          dropDownUstensilsContainer.firstChild.remove();
+        }
+      }
+      if (dropDownIngredientsContainer.firstChild) {
+        while (dropDownIngredientsContainer.firstChild) {
+          dropDownIngredientsContainer.firstChild.remove();
+        }
+      }
+
+      for (let i = 0; i < this.appareil.length; i++) {
+        const li = document.createElement("li");
+        li.textContent = this.appareil[i];
+        dropDownAppareilContainer.appendChild(li);
+      }
+    });
+    dropDownUstensilsDown.addEventListener("click", () => {
+      dropDownUstensilsDown.style.display = "none";
+      dropDownUstensilsUp.style.display = "flex";
+      dropDownIngredientsDown.style.display = "flex";
+      dropDownIngredientsUp.style.display = "none";
+      dropDownAppareilDown.style.display = "flex";
+      dropDownAppareilUp.style.display = "none";
+      dropDownUstensilsContainer.style.width = "700px";
+      dropDownUstensilsContainer.parentElement.style.width = "660px";
+
+      dropDownIngredientsContainer.parentElement.style.width = "170px";
+      dropDownAppareilContainer.parentElement.style.width = "170px";
+
+      if (dropDownAppareilContainer.firstChild) {
+        while (dropDownAppareilContainer.firstChild) {
+          dropDownAppareilContainer.firstChild.remove();
+        }
+      }
+      if (dropDownIngredientsContainer.firstChild) {
+        while (dropDownIngredientsContainer.firstChild) {
+          dropDownIngredientsContainer.firstChild.remove();
+        }
+      }
+
+      for (let i = 0; i < this.ustensils.length; i++) {
+        const li = document.createElement("li");
+        li.textContent = this.ustensils[i];
+        dropDownUstensilsContainer.appendChild(li);
+      }
+    });
+    dropDownIngredientsUp.addEventListener("click", () => {
+      dropDownIngredientsUp.style.display = "none";
+      dropDownIngredientsDown.style.display = "flex";
+
+      while (dropDownIngredientsContainer.firstChild) {
+        dropDownIngredientsContainer.firstChild.remove();
+      }
+
+      dropDownIngredientsContainer.parentElement.style.width = "170px";
+    });
+    dropDownAppareilUp.addEventListener("click", () => {
+      dropDownAppareilUp.style.display = "none";
+      dropDownAppareilDown.style.display = "flex";
+      while (dropDownAppareilContainer.firstChild) {
+        dropDownAppareilContainer.firstChild.remove();
+      }
+      dropDownAppareilContainer.parentElement.style.width = "170px";
+    });
+    dropDownUstensilsUp.addEventListener("click", () => {
+      dropDownUstensilsUp.style.display = "none";
+      dropDownUstensilsDown.style.display = "flex";
+      while (dropDownUstensilsContainer.firstChild) {
+        dropDownUstensilsContainer.firstChild.remove();
+      }
+      dropDownUstensilsContainer.parentElement.style.width = "170px";
+    });
   }
 
   async getRecipes() {
@@ -97,5 +231,9 @@ export default class Homepage {
   filterWhole(string, domElem) {
     console.log("string", string);
     console.log("domElem", domElem);
+  }
+
+  displayDropdown() {
+    console.log("active");
   }
 }
