@@ -28,11 +28,8 @@ export default class Homepage {
                 .toLowerCase()
                 .includes(barreRecherche.value.toLowerCase())
             )
-            // Filter par ingrédients
           ) {
             listeRecette[i].style.display = "flex";
-
-            //  display.nouveautab
           } else {
             listeRecette[i].style.display = "none";
           }
