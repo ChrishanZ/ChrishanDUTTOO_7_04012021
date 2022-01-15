@@ -2,8 +2,8 @@ import Recipe from "./Recipe.js";
 // recette__liste
 export default class Homepage {
   constructor() {
-    this.recipes = [];  // tab inital 50 recettes --> l'affiche dans le dom 
-    this.recipesFiltered = []; // tab --->  ok donc si par exemple 4 resultats --> compare les titres avec ceux du dom et je display none le reste 
+    this.recipes = []; // tab inital 50 recettes --> l'affiche dans le dom
+    this.recipesFiltered = []; // tab --->  ok donc si par exemple 4 resultats --> compare les titres avec ceux du dom et je display none le reste
     this.ingredients = [];
     this.appareil = [];
     this.ustensils = [];
@@ -16,19 +16,23 @@ export default class Homepage {
     barreRecherche.addEventListener("input", (e) => {
       for (let i = 0; i < this.recipes.length; i++) {
         if (barreRecherche.value.length > 2) {
-          // enlever ustensiles
           if (
             this.recipes[i].name
               .toLowerCase()
               .includes(barreRecherche.value.toLowerCase()) ||
             this.recipes[i].description
               .toLowerCase()
-              .includes(barreRecherche.value.toLowerCase())
+              .includes(barreRecherche.value.toLowerCase()) ||
+            this.recipes[i].ingredients.find((x) =>
+              x.ingredient
+                .toLowerCase()
+                .includes(barreRecherche.value.toLowerCase())
+            )
             // Filter par ingrédients
           ) {
             listeRecette[i].style.display = "flex";
 
-           //  display.nouveautab
+            //  display.nouveautab
           } else {
             listeRecette[i].style.display = "none";
           }
@@ -37,8 +41,6 @@ export default class Homepage {
         }
       }
     });
-
-
   }
 
   async getRecipes() {
