@@ -82,8 +82,10 @@ export default class Homepage {
       containerRecipes.appendChild(this.recipes[i].display());
     }
   }
-
-  displayDropdown() {
-    console.log("active");
+  deleteAllRecipes() {
+    const containerRecipes = document.querySelector(".recette__liste");
+    while (containerRecipes.firstChild) {
+      containerRecipes.firstChild.remove();
+    }
   }
 }
