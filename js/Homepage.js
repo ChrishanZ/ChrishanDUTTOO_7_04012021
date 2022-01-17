@@ -49,9 +49,12 @@ export default class Homepage {
             const index = this.recipesFiltered.indexOf(this.recipes[i]);
             if (index > -1) {
               this.recipesFiltered.splice(index, 1);
+              this.deleteAllRecipes();
+              for (let k = 0; k < this.recipesFiltered.length; k++) {
+                containerRecipes.appendChild(this.recipesFiltered[k].display());
+              }
             }
             if (this.recipesFiltered.length === 0) {
-              this.deleteAllRecipes();
             }
           }
         }
