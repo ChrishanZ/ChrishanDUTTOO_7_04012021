@@ -8,8 +8,8 @@ export default class Homepage {
     this.appareil = [];
     this.ustensils = [];
 
-    const containerRecette = document.querySelector(".recette__liste");
-    const listeRecette = containerRecette.children;
+    const containerRecipes = document.querySelector(".recette__liste");
+    const listeRecette = containerRecipes.children;
 
     const barreRecherche = document.querySelector("#barreRecherche");
 
