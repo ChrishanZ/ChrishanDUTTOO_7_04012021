@@ -14,6 +14,11 @@ export default class Homepage {
     const barreRecherche = document.querySelector("#barreRecherche");
 
     barreRecherche.addEventListener("input", (e) => {
+      if (barreRecherche.value.length < 3) {
+        this.recipesFiltered = [];
+        this.deleteAllRecipes();
+        this.displayAllRecipes();
+      }
       for (let i = 0; i < this.recipes.length; i++) {
         if (barreRecherche.value.length > 2) {
           if (
@@ -29,14 +34,29 @@ export default class Homepage {
                 .includes(barreRecherche.value.toLowerCase())
             )
           ) {
-            listeRecette[i].style.display = "flex";
+            console.log("filtered : ", this.recipes[i].name);
+            const index = this.recipesFiltered.findIndex(
+              (x) => x.name === this.recipes[i].name
+            );
+            this.deleteAllRecipes();
+            if (index === -1) {
+              this.recipesFiltered.push(this.recipes[i]);
+            }
+            for (let k = 0; k < this.recipesFiltered.length; k++) {
+              containerRecipes.appendChild(this.recipesFiltered[k].display());
+            }
           } else {
-            listeRecette[i].style.display = "none";
+            const index = this.recipesFiltered.indexOf(this.recipes[i]);
+            if (index > -1) {
+              this.recipesFiltered.splice(index, 1);
+            }
+            if (this.recipesFiltered.length === 0) {
+              this.deleteAllRecipes();
+            }
           }
-        } else {
-          listeRecette[i].style.display = "flex";
         }
       }
+      console.log("this.recipesfiltered :", this.recipesFiltered);
     });
   }
 
