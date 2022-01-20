@@ -5,12 +5,13 @@ export default class Homepage {
     this.recipes = []; // tab inital 50 recettes --> l'affiche dans le dom
     this.recipesFiltered = []; // tab --->  ok donc si par exemple 4 resultats --> compare les titres avec ceux du dom et je display none le reste
     this.ingredients = [];
+    this.ingredientsFiltered = [];
     this.appareil = [];
+    this.appareilFiltered = [];
     this.ustensils = [];
+    this.ustensilsFiltered = [];
 
     const containerRecipes = document.querySelector(".recette__liste");
-    const listeRecette = containerRecipes.children;
-
     const barreRecherche = document.querySelector("#barreRecherche");
 
     barreRecherche.addEventListener("input", (e) => {
@@ -18,9 +19,8 @@ export default class Homepage {
         this.recipesFiltered = [];
         this.deleteAllRecipes();
         this.displayAllRecipes();
-      }
-      for (let i = 0; i < this.recipes.length; i++) {
-        if (barreRecherche.value.length > 2) {
+      } else {
+        for (let i = 0; i < this.recipes.length; i++) {
           if (
             this.recipes[i].name
               .toLowerCase()
@@ -34,32 +34,48 @@ export default class Homepage {
                 .includes(barreRecherche.value.toLowerCase())
             )
           ) {
-            console.log("filtered : ", this.recipes[i].name);
-            const index = this.recipesFiltered.findIndex(
-              (x) => x.name === this.recipes[i].name
-            );
-            this.deleteAllRecipes();
-            if (index === -1) {
+            const index = this.recipesFiltered.indexOf(this.recipes[i]);
+            if (index < 0) {
               this.recipesFiltered.push(this.recipes[i]);
-            }
-            for (let k = 0; k < this.recipesFiltered.length; k++) {
-              containerRecipes.appendChild(this.recipesFiltered[k].display());
-            }
+            } 
           } else {
             const index = this.recipesFiltered.indexOf(this.recipes[i]);
             if (index > -1) {
               this.recipesFiltered.splice(index, 1);
-              this.deleteAllRecipes();
-              for (let k = 0; k < this.recipesFiltered.length; k++) {
-                containerRecipes.appendChild(this.recipesFiltered[k].display());
-              }
-            }
-            if (this.recipesFiltered.length === 0) {
             }
           }
         }
+        this.deleteAllRecipes();
+        for (let i = 0; i < this.recipesFiltered.length; i++) {
+          containerRecipes.appendChild(this.recipesFiltered[i].display());
+        }
       }
       console.log("this.recipesfiltered :", this.recipesFiltered);
+
+      const filterIngredients = document.querySelector("#ingredients");
+      filterIngredients.addEventListener("click", () => {
+        let tagsIngredients = [];
+        if (this.recipesFiltered.length > 1) {
+          for (let i = 0; i < this.recipesFiltered.length; i++) {
+            console.log(this.recipesFiltered[i].ingredients);
+            for (
+              let j = 0;
+              j < this.recipesFiltered[i].ingredients.length;
+              j++
+            ) {
+              tagsIngredients.push(
+                this.recipesFiltered[i].ingredients[j].ingredient
+              );
+            }
+          }
+        } else {
+          //faire conditions si tableau recipesFiltered est vide
+        }
+        console.log([...new Set(tagsIngredients)]);
+      });
+
+      // const filterIngredients = document.querySelector("");
+      // const filterIngredients = document.querySelector("");
     });
   }
 
