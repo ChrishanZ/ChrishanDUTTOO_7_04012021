@@ -88,7 +88,7 @@
         left: 0;
         padding-left: 20px;
       }
-      .arrowDown {
+      .arrow {
         display: block;
         content: "";
         background-image: url("../images/logos/arrowDown.svg");
@@ -96,19 +96,8 @@
         background-position: center;
         width: 16px;
         height: 10px;
-        right: 20px;
-        position: absolute;
-        cursor: pointer;
-      }
-      .arrowUp {
-        display: none;
-        content: "";
-        background-image: url("../images/logos/arrowUp.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-        width: 16px;
-        height: 10px;
-        right: 20px;
+        right: 10px;
+        padding: 10px;
         position: absolute;
         cursor: pointer;
       }
