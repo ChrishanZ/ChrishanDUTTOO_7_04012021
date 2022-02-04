@@ -12,39 +12,25 @@ export default class Homepage {
     this.ustensilsFiltered = [];
 
     this.containerRecipes = document.querySelector(".recette__liste");
-
     const barreRecherche = document.querySelector("#barreRecherche");
 
     barreRecherche.addEventListener("input", (e) => {
       if (barreRecherche.value.length < 3) {
+        console.log("iffed");
         this.recipesFiltered = [];
         this.deleteAllRecipes();
         this.displayAllRecipes();
       } else {
-        for (let i = 0; i < this.recipes.length; i++) {
-          if (
-            this.recipes[i].name
-              .toLowerCase()
-              .includes(barreRecherche.value.toLowerCase()) ||
-            this.recipes[i].description
-              .toLowerCase()
-              .includes(barreRecherche.value.toLowerCase()) ||
-            this.recipes[i].ingredients.find((x) =>
-              x.ingredient
-                .toLowerCase()
-                .includes(barreRecherche.value.toLowerCase())
-            )
-          ) {
-            const index = this.recipesFiltered.indexOf(this.recipes[i]);
-            if (index < 0) {
-              this.recipesFiltered.push(this.recipes[i]);
-            }
-          } else {
-            const index = this.recipesFiltered.indexOf(this.recipes[i]);
-            if (index > -1) {
-              this.recipesFiltered.splice(index, 1);
-            }
-          }
+        console.log("effed");
+        console.log(this.ingredientsFiltered);
+        if (
+          this.ingredientsFiltered.length === 0 &&
+          this.appareilFiltered.length === 0 &&
+          this.ustensilsFiltered.length === 0
+        ) {
+          this.checkInput(this.recipes);
+        } else {
+          //faire la condition quand on a encore des tags
         }
         this.deleteAllRecipes();
         this.displayFilteredRecipes(this.recipesFiltered);
@@ -54,19 +40,42 @@ export default class Homepage {
     const ingredientsFilter = document.querySelector("#ingredients");
     const arrowIngredients = ingredientsFilter.querySelector(".arrow");
     arrowIngredients.addEventListener("click", () => {
+      const listIngredients = document.querySelector("#listeTriIngredients");
       if (
         arrowIngredients.style.backgroundImage ===
         `url("../images/logos/arrowUp.svg")`
       ) {
+        this.deleteAllDomListe(listIngredients);
         arrowIngredients.style.backgroundImage =
           "url('../images/logos/arrowDown.svg')";
-        // if (ingredientsFilter.querySelector("ul").children.length > 0) {
-        this.deleteAllDomListe(ingredientsFilter.querySelector("ul"));
-        // }
       } else {
         arrowIngredients.style.backgroundImage =
           "url('../images/logos/arrowUp.svg')";
-        this.filterTags();
+        if (barreRecherche.value.length < 3) {
+          console.log('test');
+          this.deleteAllDomListe(listIngredients);
+          for (let i = 0; i < this.ingredients.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = this.ingredients[i];
+            listIngredients.appendChild(li);
+          }
+        } else {
+          //affiche avec this.recipesFiltered
+          console.log("this.recipesFiltered :" , this.recipesFiltered);
+          let tabIngredients = [];
+          for (let j = 0; j < this.recipesFiltered.length; j++) {
+            for (let k = 0; k < this.recipesFiltered[j].ingredients.length; k++) {
+              tabIngredients.push(this.recipesFiltered[j].ingredients[k].ingredient);
+            }
+          }
+          tabIngredients = [...new Set(tabIngredients)];
+          console.log("ingredients filtered : ", this.ingredientsFiltered);
+          for (let i = 0; i < tabIngredients.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = tabIngredients[i];
+            listIngredients.appendChild(li);
+          }
+        }
       }
     });
   }
@@ -107,6 +116,7 @@ export default class Homepage {
       console.log("error in try/catch", e);
     }
   }
+
   displayAllRecipes() {
     for (let i = 0; i < this.recipes.length; i++) {
       this.containerRecipes.appendChild(this.recipes[i].display());
@@ -127,9 +137,35 @@ export default class Homepage {
       this.containerRecipes.appendChild(recipesFiltered[i].display());
     }
   }
+  checkInput(liste) {
+    for (let i = 0; i < liste.length; i++) {
+      if (
+        liste[i].name
+          .toLowerCase()
+          .includes(barreRecherche.value.toLowerCase()) ||
+        liste[i].description
+          .toLowerCase()
+          .includes(barreRecherche.value.toLowerCase()) ||
+        liste[i].ingredients.find((x) =>
+          x.ingredient
+            .toLowerCase()
+            .includes(barreRecherche.value.toLowerCase())
+        )
+      ) {
+        const index = this.recipesFiltered.indexOf(liste[i]);
+        if (index < 0) {
+          this.recipesFiltered.push(liste[i]);
+        }
+      } else {
+        const index = this.recipesFiltered.indexOf(liste[i]);
+        if (index > -1) {
+          this.recipesFiltered.splice(index, 1);
+        }
+      }
+    }
+  }
 
-  filterTags() {
-    console.log("test");
-    console.log(this.recipesFiltered);
+  tagCheck() {
+
   }
 }
