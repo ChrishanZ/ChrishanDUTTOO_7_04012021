@@ -14,7 +14,14 @@ export default class Homepage {
     this.containerRecipes = document.querySelector(".recette__liste");
     const barreRecherche = document.querySelector("#barreRecherche");
 
+    const ingredientsFilter = document.querySelector("#ingredients");
+    const arrowIngredients = ingredientsFilter.querySelector(".arrow");
+    const listIngredients = document.querySelector("#listeTriIngredients");
+
     barreRecherche.addEventListener("input", (e) => {
+      arrowIngredients.style.backgroundImage =
+        "url('../images/logos/arrowDown.svg')";
+      this.deleteAllDomListe(listIngredients);
       if (barreRecherche.value.length < 3) {
         console.log("iffed");
         this.recipesFiltered = [];
@@ -37,10 +44,7 @@ export default class Homepage {
       }
     });
 
-    const ingredientsFilter = document.querySelector("#ingredients");
-    const arrowIngredients = ingredientsFilter.querySelector(".arrow");
     arrowIngredients.addEventListener("click", () => {
-      const listIngredients = document.querySelector("#listeTriIngredients");
       if (
         arrowIngredients.style.backgroundImage ===
         `url("../images/logos/arrowUp.svg")`
@@ -51,27 +55,88 @@ export default class Homepage {
       } else {
         arrowIngredients.style.backgroundImage =
           "url('../images/logos/arrowUp.svg')";
-        if (barreRecherche.value.length < 3) {
-          console.log('test');
+        if (
+          barreRecherche.value.length < 3 &&
+          this.ingredientsFiltered.length === 0 &&
+          this.appareilFiltered.length === 0 &&
+          this.ustensilsFiltered.length === 0
+        ) {
           this.deleteAllDomListe(listIngredients);
           for (let i = 0; i < this.ingredients.length; i++) {
             const li = document.createElement("li");
+            li.addEventListener("click", (event) => {
+              for (let i = 0; i < this.recipes.length; i++) {
+                if (
+                  this.recipes[i].ingredients.filter(
+                    (element) =>
+                      element.ingredient.toLowerCase() ===
+                      event.target.textContent
+                  ).length > 0
+                ) {
+                  this.recipesFiltered.push(this.recipes[i]);
+                }
+              }
+              this.ingredientsFiltered.push(event.target.textContent);
+              this.deleteAllRecipes();
+              this.displayFilteredRecipes(this.recipesFiltered);
+              arrowIngredients.style.backgroundImage =
+                "url('../images/logos/arrowDown.svg')";
+              this.deleteAllDomListe(listIngredients);
+            });
+
             li.textContent = this.ingredients[i];
             listIngredients.appendChild(li);
           }
         } else {
-          //affiche avec this.recipesFiltered
-          console.log("this.recipesFiltered :" , this.recipesFiltered);
           let tabIngredients = [];
           for (let j = 0; j < this.recipesFiltered.length; j++) {
-            for (let k = 0; k < this.recipesFiltered[j].ingredients.length; k++) {
-              tabIngredients.push(this.recipesFiltered[j].ingredients[k].ingredient);
+            for (
+              let k = 0;
+              k < this.recipesFiltered[j].ingredients.length;
+              k++
+            ) {
+              tabIngredients.push(
+                this.recipesFiltered[j].ingredients[k].ingredient
+              );
             }
           }
           tabIngredients = [...new Set(tabIngredients)];
-          console.log("ingredients filtered : ", this.ingredientsFiltered);
           for (let i = 0; i < tabIngredients.length; i++) {
             const li = document.createElement("li");
+            li.addEventListener("click", (event) => {
+              console.log(this.recipesFiltered);
+              let newTab = [];
+              for (let i = 0; i < this.recipesFiltered.length; i++) {
+                if (
+                  this.recipesFiltered[i].ingredients.filter(
+                    (element) =>
+                      element.ingredient.toLowerCase() ===
+                      event.target.textContent.toLowerCase()
+                  ).length > 0
+                ) {
+                  if (this.recipesFiltered[i])
+                    newTab.push(this.recipesFiltered[i]);
+                }
+              }
+              this.recipesFiltered = newTab;
+              newTab = [...new Set(newTab)];
+              if (
+                !this.ingredientsFiltered.includes(
+                  event.target.textContent.toLowerCase()
+                )
+              ) {
+                this.ingredientsFiltered.push(
+                  event.target.textContent.toLowerCase()
+                );
+              }
+
+              this.deleteAllRecipes();
+              this.displayFilteredRecipes(this.recipesFiltered);
+              arrowIngredients.style.backgroundImage =
+                "url('../images/logos/arrowDown.svg')";
+              this.deleteAllDomListe(listIngredients);
+              console.log(this.ingredientsFiltered);
+            });
             li.textContent = tabIngredients[i];
             listIngredients.appendChild(li);
           }
@@ -165,7 +230,5 @@ export default class Homepage {
     }
   }
 
-  tagCheck() {
-
-  }
+  tagCheck() {}
 }
