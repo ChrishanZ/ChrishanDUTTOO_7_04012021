@@ -12,135 +12,93 @@ export default class Homepage {
     this.ustensilsFiltered = [];
 
     this.containerRecipes = document.querySelector(".recette__liste");
-    const barreRecherche = document.querySelector("#barreRecherche");
-
+    this.listIngredients = document.querySelector("#listeTriIngredients");
+    this.listAppareil = document.querySelector("#listeTriAppareil");
+    this.listUstensils = document.querySelector("#listeTriUstensils");
+    this.filtreButtons = document.querySelector(".tri__elements");
     const ingredientsFilter = document.querySelector("#ingredients");
-    const arrowIngredients = ingredientsFilter.querySelector(".arrow");
-    const listIngredients = document.querySelector("#listeTriIngredients");
+    const appareilFilter = document.querySelector("#appareil");
+    const ustensilsFilter = document.querySelector("#ustensils");
+    this.arrowIngredients = ingredientsFilter.querySelector(".arrow");
+    this.arrowAppareil = appareilFilter.querySelector(".arrow");
+    this.arrowUstensils = ustensilsFilter.querySelector(".arrow");
+
+    const arrowUp = `url("../images/logos/arrowUp.svg")`;
+    const arrowDown = `url("../images/logos/arrowDown.svg")`;
+
+    const barreRecherche = document.querySelector("#barreRecherche");
+    let refresh = false;
 
     barreRecherche.addEventListener("input", (e) => {
-      arrowIngredients.style.backgroundImage =
-        "url('../images/logos/arrowDown.svg')";
-      this.deleteAllDomListe(listIngredients);
-      if (barreRecherche.value.length < 3) {
-        console.log("iffed");
-        this.recipesFiltered = [];
-        this.deleteAllRecipes();
-        this.displayAllRecipes();
-      } else {
-        console.log("effed");
-        console.log(this.ingredientsFiltered);
-        if (
-          this.ingredientsFiltered.length === 0 &&
-          this.appareilFiltered.length === 0 &&
-          this.ustensilsFiltered.length === 0
-        ) {
-          this.checkInput(this.recipes);
+      let texteSaisi = e.target.value.toLowerCase();
+      refresh = true;
+      if (texteSaisi.length > 2) {
+        this.recipesFiltered = this.filtrer(
+          this.recipes,
+          texteSaisi,
+          [],
+          [],
+          []
+        );
+        if (this.recipesFiltered.length === 0) {
+          console.log("Display : pas de résultat");
+          const h2 = document.createElement("h2");
+          h2.textContent = "Pas de résultat existant pour votre recette.";
+          this.containerRecipes.parentElement.appendChild(h2);
+          this.deleteAllRecipes();
         } else {
-          //faire la condition quand on a encore des tags
+          this.deleteAllRecipes();
+          this.displayFilteredRecipes(this.recipesFiltered);
         }
-        this.deleteAllRecipes();
-        this.displayFilteredRecipes(this.recipesFiltered);
+      } else {
+        if (refresh === true) {
+          this.deleteAllRecipes();
+          this.displayAllRecipes();
+        }
       }
     });
 
-    arrowIngredients.addEventListener("click", () => {
-      if (
-        arrowIngredients.style.backgroundImage ===
-        `url("../images/logos/arrowUp.svg")`
-      ) {
-        this.deleteAllDomListe(listIngredients);
-        arrowIngredients.style.backgroundImage =
-          "url('../images/logos/arrowDown.svg')";
+    this.arrowIngredients.addEventListener("click", () => {
+      if (this.arrowIngredients.style.backgroundImage === arrowUp) {
+        this.arrowIngredients.style.backgroundImage = arrowDown;
+        this.deleteAllDomListe(this.listIngredients);
       } else {
-        arrowIngredients.style.backgroundImage =
-          "url('../images/logos/arrowUp.svg')";
-        if (
-          barreRecherche.value.length < 3 &&
-          this.ingredientsFiltered.length === 0 &&
-          this.appareilFiltered.length === 0 &&
-          this.ustensilsFiltered.length === 0
-        ) {
-          this.deleteAllDomListe(listIngredients);
-          for (let i = 0; i < this.ingredients.length; i++) {
-            const li = document.createElement("li");
-            li.addEventListener("click", (event) => {
-              for (let i = 0; i < this.recipes.length; i++) {
-                if (
-                  this.recipes[i].ingredients.filter(
-                    (element) =>
-                      element.ingredient.toLowerCase() ===
-                      event.target.textContent
-                  ).length > 0
-                ) {
-                  this.recipesFiltered.push(this.recipes[i]);
-                }
-              }
-              this.ingredientsFiltered.push(event.target.textContent);
-              this.deleteAllRecipes();
-              this.displayFilteredRecipes(this.recipesFiltered);
-              arrowIngredients.style.backgroundImage =
-                "url('../images/logos/arrowDown.svg')";
-              this.deleteAllDomListe(listIngredients);
-            });
+        this.arrowIngredients.style.backgroundImage = arrowUp;
+        this.showFilters(
+          this.ingredients,
+          this.listIngredients,
+          "blue",
+          this.ingredientsFiltered
+        );
+      }
+    });
 
-            li.textContent = this.ingredients[i];
-            listIngredients.appendChild(li);
-          }
-        } else {
-          let tabIngredients = [];
-          for (let j = 0; j < this.recipesFiltered.length; j++) {
-            for (
-              let k = 0;
-              k < this.recipesFiltered[j].ingredients.length;
-              k++
-            ) {
-              tabIngredients.push(
-                this.recipesFiltered[j].ingredients[k].ingredient
-              );
-            }
-          }
-          tabIngredients = [...new Set(tabIngredients)];
-          for (let i = 0; i < tabIngredients.length; i++) {
-            const li = document.createElement("li");
-            li.addEventListener("click", (event) => {
-              console.log(this.recipesFiltered);
-              let newTab = [];
-              for (let i = 0; i < this.recipesFiltered.length; i++) {
-                if (
-                  this.recipesFiltered[i].ingredients.filter(
-                    (element) =>
-                      element.ingredient.toLowerCase() ===
-                      event.target.textContent.toLowerCase()
-                  ).length > 0
-                ) {
-                  if (this.recipesFiltered[i])
-                    newTab.push(this.recipesFiltered[i]);
-                }
-              }
-              this.recipesFiltered = newTab;
-              newTab = [...new Set(newTab)];
-              if (
-                !this.ingredientsFiltered.includes(
-                  event.target.textContent.toLowerCase()
-                )
-              ) {
-                this.ingredientsFiltered.push(
-                  event.target.textContent.toLowerCase()
-                );
-              }
-
-              this.deleteAllRecipes();
-              this.displayFilteredRecipes(this.recipesFiltered);
-              arrowIngredients.style.backgroundImage =
-                "url('../images/logos/arrowDown.svg')";
-              this.deleteAllDomListe(listIngredients);
-              console.log(this.ingredientsFiltered);
-            });
-            li.textContent = tabIngredients[i];
-            listIngredients.appendChild(li);
-          }
-        }
+    this.arrowAppareil.addEventListener("click", () => {
+      if (this.arrowAppareil.style.backgroundImage === arrowUp) {
+        this.arrowAppareil.style.backgroundImage = arrowDown;
+        this.deleteAllDomListe(this.listAppareil);
+      } else {
+        this.arrowAppareil.style.backgroundImage = arrowUp;
+        this.showFilters(
+          this.appareil,
+          this.listAppareil,
+          "yellow",
+          this.appareilFiltered
+        );
+      }
+    });
+    this.arrowUstensils.addEventListener("click", () => {
+      if (this.arrowUstensils.style.backgroundImage === arrowUp) {
+        this.arrowUstensils.style.backgroundImage = arrowDown;
+        this.deleteAllDomListe(this.listUstensils);
+      } else {
+        this.arrowUstensils.style.backgroundImage = arrowUp;
+        this.showFilters(
+          this.ustensils,
+          this.listUstensils,
+          "red",
+          this.ustensilsFiltered
+        );
       }
     });
   }
@@ -202,33 +160,54 @@ export default class Homepage {
       this.containerRecipes.appendChild(recipesFiltered[i].display());
     }
   }
-  checkInput(liste) {
-    for (let i = 0; i < liste.length; i++) {
-      if (
-        liste[i].name
-          .toLowerCase()
-          .includes(barreRecherche.value.toLowerCase()) ||
-        liste[i].description
-          .toLowerCase()
-          .includes(barreRecherche.value.toLowerCase()) ||
-        liste[i].ingredients.find((x) =>
-          x.ingredient
-            .toLowerCase()
-            .includes(barreRecherche.value.toLowerCase())
-        )
-      ) {
-        const index = this.recipesFiltered.indexOf(liste[i]);
-        if (index < 0) {
-          this.recipesFiltered.push(liste[i]);
-        }
-      } else {
-        const index = this.recipesFiltered.indexOf(liste[i]);
-        if (index > -1) {
-          this.recipesFiltered.splice(index, 1);
-        }
-      }
+  displayFilters(filters) {
+    for (let i = 0; i < filters.length; i++) {
+      this.containerRecipes.appendChild(recipesFiltered[i].display());
     }
   }
 
-  tagCheck() {}
+  showFilters(tableauDropdown, domToPushLi, color, dropDownFiltered) {
+    for (let i = 0; i < tableauDropdown.length; i++) {
+      const li = document.createElement("li");
+      li.addEventListener("click", (event) => {
+        console.log(event.target.textContent);
+        const li = document.createElement("li");
+        li.textContent = event.target.textContent;
+        li.classList.add(color);
+        this.filtreButtons.appendChild(li);
+        for (let i = 0; i < this.recipes.length; i++) {
+          if (
+            this.recipes[i].ingredients.filter(
+              (element) =>
+                element.ingredient.toLowerCase() === event.target.textContent
+            ).length > 0
+          ) {
+            this.recipesFiltered.push(this.recipes[i]);
+          }
+        }
+        dropDownFiltered.push(event.target.textContent);
+        this.deleteAllRecipes();
+        this.displayFilteredRecipes(this.recipesFiltered);
+        this.arrowIngredients.style.backgroundImage =
+          "url('../images/logos/arrowDown.svg')";
+        this.deleteAllDomListe(this.listIngredients);
+      });
+      li.textContent = tableauDropdown[i];
+      domToPushLi.appendChild(li);
+    }
+  }
+
+  filtrer(tableauRecette, champSaisi, tagIngredient, tagUstensil, tagAppareil) {
+    let firstresult = tableauRecette.filter(function (recette) {
+      return (
+        recette.name.toLowerCase().includes(champSaisi) ||
+        recette.description.toLowerCase().includes(champSaisi) ||
+        recette.ingredients.find((x) => x.ingredient.includes(champSaisi))
+      );
+    });
+    // firstresult = firstresult.filter(tagIngredient);
+    // firstresult = firstresult.filter(tagUstensil);
+    // firstresult = firstresult.filter(tagAppareil);
+    return firstresult;
+  }
 }

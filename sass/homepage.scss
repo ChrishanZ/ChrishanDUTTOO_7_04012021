@@ -31,6 +31,7 @@
   padding-top: 40px;
   &__elements {
     display: flex;
+    flex-wrap: wrap;
     li {
       display: flex;
       justify-content: space-between;
@@ -41,8 +42,9 @@
       font-size: 14px;
       font-family: "Lato", sans-serif;
       color: $white;
-      padding: 0 20px;
+      padding: 0 0 0 20px;
       margin: 0 10px 15px 0;
+      text-transform: capitalize;
       &::after {
         content: "";
         background-image: url("../images/logos/cross.svg");
@@ -50,6 +52,7 @@
         background-position: center;
         width: 20px;
         height: 20px;
+        padding-left: 20px;
       }
     }
   }
