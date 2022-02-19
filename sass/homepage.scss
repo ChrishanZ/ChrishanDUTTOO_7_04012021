@@ -39,7 +39,7 @@
   &__elements {
     display: flex;
     flex-wrap: wrap;
-    li {
+    div {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -52,7 +52,7 @@
       padding: 0 0 0 20px;
       margin: 0 10px 15px 0;
       text-transform: capitalize;
-      &::after {
+      span {
         content: "";
         background-image: url("../images/logos/cross.svg");
         background-repeat: no-repeat;
@@ -60,6 +60,7 @@
         width: 20px;
         height: 20px;
         padding-left: 20px;
+        cursor: pointer;
       }
     }
   }

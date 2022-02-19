@@ -10,6 +10,7 @@ export default class Homepage {
     this.appareilFiltered = [];
     this.ustensils = [];
     this.ustensilsFiltered = [];
+    this.startFilter = false;
 
     this.containerRecipes = document.querySelector(".recette__liste");
     this.listIngredients = document.querySelector("#listeTriIngredients");
@@ -33,13 +34,24 @@ export default class Homepage {
       let texteSaisi = e.target.value.toLowerCase();
       refresh = true;
       if (texteSaisi.length > 2) {
-        this.recipesFiltered = this.filtrer(
-          this.recipes,
-          texteSaisi,
-          [],
-          [],
-          []
-        );
+        if (this.startFilter) {
+          this.recipesFiltered = this.filtrer(
+            this.recipesFiltered,
+            texteSaisi,
+            [],
+            [],
+            []
+          );
+        } else {
+          this.recipesFiltered = this.filtrer(
+            this.recipes,
+            texteSaisi,
+            [],
+            [],
+            []
+          );
+        }
+
         if (this.recipesFiltered.length === 0) {
           document.querySelector(".tri__alert").style.display = "block";
           this.deleteAllRecipes();
@@ -49,10 +61,21 @@ export default class Homepage {
           this.displayFilteredRecipes(this.recipesFiltered);
         }
       } else {
-        if (refresh === true) {
+        if (refresh === true && this.startFilter === false) {
           document.querySelector(".tri__alert").style.display = "none";
           this.deleteAllRecipes();
           this.displayAllRecipes();
+        } else if (refresh === true && this.startFilter === true) {
+          document.querySelector(".tri__alert").style.display = "none";
+          this.deleteAllRecipes();
+          this.recipesFiltered = this.filtrer(
+            this.recipes,
+            [],
+            this.ingredientsFiltered,
+            this.appareilFiltered,
+            this.ustensilsFiltered
+          );
+          this.displayFilteredRecipes(this.recipesFiltered);
         }
       }
     });
@@ -174,17 +197,35 @@ export default class Homepage {
       for (let i = 0; i < this.recipesFiltered.length; i++) {
         if (color === "blue") {
           for (let j = 0; j < this.recipesFiltered[i].ingredients.length; j++) {
-            intermediaire.push(
-              this.recipesFiltered[i].ingredients[j].ingredient.toLowerCase()
-            );
+            if (
+              !intermediaire.includes(
+                this.recipesFiltered[i].ingredients[j].ingredient.toLowerCase()
+              )
+            ) {
+              intermediaire.push(
+                this.recipesFiltered[i].ingredients[j].ingredient.toLowerCase()
+              );
+            }
           }
         } else if (color === "yellow") {
-          intermediaire.push(this.recipesFiltered[i].appliance.toLowerCase());
+          if (
+            !intermediaire.includes(
+              this.recipesFiltered[i].appliance.toLowerCase()
+            )
+          ) {
+            intermediaire.push(this.recipesFiltered[i].appliance.toLowerCase());
+          }
         } else if (color === "red") {
           for (let j = 0; j < this.recipesFiltered[i].ustensils.length; j++) {
-            intermediaire.push(
-              this.recipesFiltered[i].ustensils[j].toLowerCase()
-            );
+            if (
+              !intermediaire.includes(
+                this.recipesFiltered[i].ustensils[j].toLowerCase()
+              )
+            ) {
+              intermediaire.push(
+                this.recipesFiltered[i].ustensils[j].toLowerCase()
+              );
+            }
           }
         }
       }
@@ -195,21 +236,64 @@ export default class Homepage {
     for (let i = 0; i < tableauDropdown.length; i++) {
       const li = document.createElement("li");
       li.addEventListener("click", (event) => {
-        const li = document.createElement("li");
-        li.textContent = event.target.textContent;
-        li.classList.add(color);
+        const div = document.createElement("div");
+        const cross = document.createElement("span");
+        cross.addEventListener("click", (element) => {
+          this.deleteAllRecipes();
+          let index = dropDownFiltered.indexOf(
+            element.target.parentElement.textContent
+          );
+          if (index !== -1) {
+            dropDownFiltered.splice(index, 1);
+          }
+          console.log(element);
+          element.target.parentElement.remove();
+          if (color === "blue") {
+            this.ingredientsFiltered = dropDownFiltered;
+          } else if (color === "yellow") {
+            this.appareilFiltered = dropDownFiltered;
+          } else if (color === "red") {
+            this.ustensilsFiltered = dropDownFiltered;
+          }
+
+          console.log("ingredientsFiltered", this.ingredientsFiltered);
+          console.log("appareilFiltered", this.appareilFiltered);
+          console.log("ustensilsFiltered", this.ustensilsFiltered);
+          this.recipesFiltered = this.filtrer(
+            this.recipes,
+            this.barreRecherche.value,
+            this.ingredientsFiltered,
+            this.appareilFiltered,
+            this.ustensilsFiltered
+          );
+          this.displayFilteredRecipes(this.recipesFiltered);
+          console.log("this.recipesFiltered", this.recipesFiltered);
+          console.log("dropDownFiltered", dropDownFiltered);
+        });
+        div.textContent = event.target.textContent;
+        div.classList.add(color);
+        div.appendChild(cross);
         if (!dropDownFiltered.includes(event.target.textContent)) {
-          this.filtreButtons.appendChild(li);
+          this.filtreButtons.appendChild(div);
           dropDownFiltered.push(event.target.textContent);
         }
-
-        this.recipesFiltered = this.filtrer(
-          this.recipes,
-          this.barreRecherche.value,
-          this.ingredientsFiltered,
-          this.appareilFiltered,
-          this.ustensilsFiltered
-        );
+        if (this.startFilter) {
+          this.recipesFiltered = this.filtrer(
+            this.recipesFiltered,
+            this.barreRecherche.value,
+            this.ingredientsFiltered,
+            this.appareilFiltered,
+            this.ustensilsFiltered
+          );
+        } else {
+          this.recipesFiltered = this.filtrer(
+            this.recipes,
+            this.barreRecherche.value,
+            this.ingredientsFiltered,
+            this.appareilFiltered,
+            this.ustensilsFiltered
+          );
+        }
 
         this.deleteAllRecipes();
         this.displayFilteredRecipes(this.recipesFiltered);
@@ -223,6 +307,8 @@ export default class Homepage {
   }
 
   filtrer(tableauRecette, champSaisi, tagIngredient, tagAppareil, tagUstensil) {
+    this.startFilter = true;
+    console.log("tableauRecette", tableauRecette);
     let firstresult = tableauRecette.filter(function (recette) {
       return (
         recette.name.toLowerCase().includes(champSaisi) ||
@@ -232,14 +318,20 @@ export default class Homepage {
     });
 
     if (tagIngredient.length > 0) {
-      firstresult = firstresult.filter((el) => {
-        let check = false;
-        el.ingredients.filter((el2) => {
-          if (tagIngredient.includes(el2.ingredient.toLowerCase())) {
-            check = true;
+      firstresult = firstresult.filter((element) => {
+        let check = 0;
+        for (let i = 0; i < element.ingredients.length; i++) {
+          if (
+            tagIngredient.includes(
+              element.ingredients[i].ingredient.toLowerCase()
+            )
+          ) {
+            check += 1;
           }
-        });
-        return check;
+          if (check === tagIngredient.length) {
+            return element;
+          }
+        }
       });
     }
 
@@ -249,13 +341,15 @@ export default class Homepage {
       });
     }
     if (tagUstensil.length > 0) {
-      firstresult = firstresult.filter((recette) => {
-        let ustensils = recette.ustensils.map((element) => {
-          return element.toLowerCase();
-        });
-
-        for (let i = 0; i < tagUstensil.length; i++) {
-          return ustensils.includes(tagUstensil[i]);
+      firstresult = firstresult.filter((element) => {
+        let check = 0;
+        for (let i = 0; i < element.ustensils.length; i++) {
+          if (tagUstensil.includes(element.ustensils[i].toLowerCase())) {
+            check += 1;
+          }
+          if (check === tagUstensil.length) {
+            return element;
+          }
         }
       });
     }
