@@ -118,11 +118,11 @@
       position: absolute;
       left: 0;
       top: 60px;
-      width: 100%;
-
+      width: 650px;
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
+      z-index: 2;
 
       li {
         &:first-child {
