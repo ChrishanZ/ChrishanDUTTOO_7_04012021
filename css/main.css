@@ -269,7 +269,7 @@ header h1 {
   top: 60px;
   width: 650px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   z-index: 2;
 }
@@ -286,11 +286,8 @@ header h1 {
   font-family: "Lato", sans-serif;
   color: #FFF;
   font-weight: 300;
-  padding: 0px 20px 10px;
+  padding: 10px 20px 10px;
   text-transform: capitalize;
-}
-.tri__filters-dropdown li:first-child {
-  padding-top: 20px;
 }
 .tri__filters-dropdown li::after {
   display: none;

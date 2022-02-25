@@ -23,6 +23,11 @@ export default class Homepage {
     this.arrowIngredients = ingredientsFilter.querySelector(".arrow");
     this.arrowAppareil = appareilFilter.querySelector(".arrow");
     this.arrowUstensils = ustensilsFilter.querySelector(".arrow");
+    this.inputIngredients = ingredientsFilter.querySelector("input");
+    this.inputAppareil = appareilFilter.querySelector("input");
+    this.inputUstensils = ustensilsFilter.querySelector("input");
+
+    this.containerFilters = document.querySelectorAll(".tri__filters-dropdown");
 
     const arrowUp = `url("../images/logos/arrowUp.svg")`;
     const arrowDown = `url("../images/logos/arrowDown.svg")`;
@@ -85,13 +90,19 @@ export default class Homepage {
         this.arrowIngredients.style.backgroundImage = arrowDown;
         this.deleteAllDomListe(this.listIngredients);
       } else {
+        for (let i = 0; i < this.containerFilters.length; i++) {
+          this.deleteAllDomListe(this.containerFilters[i]);
+        }
         this.arrowIngredients.style.backgroundImage = arrowUp;
+        this.arrowUstensils.style.backgroundImage = arrowDown;
+        this.arrowAppareil.style.backgroundImage = arrowDown;
         this.addFilters(
           this.ingredients,
           this.listIngredients,
           "blue",
           this.ingredientsFiltered,
-          this.arrowIngredients
+          this.arrowIngredients,
+          ''
         );
       }
     });
@@ -101,13 +112,19 @@ export default class Homepage {
         this.arrowAppareil.style.backgroundImage = arrowDown;
         this.deleteAllDomListe(this.listAppareil);
       } else {
+        for (let i = 0; i < this.containerFilters.length; i++) {
+          this.deleteAllDomListe(this.containerFilters[i]);
+        }
+        this.arrowIngredients.style.backgroundImage = arrowDown;
+        this.arrowUstensils.style.backgroundImage = arrowDown;
         this.arrowAppareil.style.backgroundImage = arrowUp;
         this.addFilters(
           this.appareil,
           this.listAppareil,
           "yellow",
           this.appareilFiltered,
-          this.arrowAppareil
+          this.arrowAppareil,
+          ''
         );
       }
     });
@@ -116,14 +133,89 @@ export default class Homepage {
         this.arrowUstensils.style.backgroundImage = arrowDown;
         this.deleteAllDomListe(this.listUstensils);
       } else {
+        for (let i = 0; i < this.containerFilters.length; i++) {
+          this.deleteAllDomListe(this.containerFilters[i]);
+        }
+        this.arrowIngredients.style.backgroundImage = arrowDown;
         this.arrowUstensils.style.backgroundImage = arrowUp;
+        this.arrowAppareil.style.backgroundImage = arrowDown;
         this.addFilters(
           this.ustensils,
           this.listUstensils,
           "red",
           this.ustensilsFiltered,
-          this.arrowUstensils
+          this.arrowUstensils,
+          ''
         );
+      }
+    });
+
+    this.inputIngredients.addEventListener("input", (e) => {
+      let texteSaisi = e.target.value.toLowerCase();
+      if(texteSaisi.length > 0){
+        this.arrowIngredients.style.backgroundImage = arrowUp;
+        this.arrowUstensils.style.backgroundImage = arrowDown;
+        this.arrowAppareil.style.backgroundImage = arrowDown;
+        this.deleteAllDomListe(this.listIngredients);
+        this.addFilters(
+          this.ingredients,
+          this.listIngredients,
+          "blue",
+          this.ingredientsFiltered,
+          this.arrowIngredients,
+          texteSaisi
+        );
+      }else {
+        console.log('close');
+        this.arrowIngredients.style.backgroundImage = arrowDown;
+        this.deleteAllDomListe(this.listIngredients);
+      }
+    });
+    this.inputAppareil.addEventListener("input", (e) => {
+      let texteSaisi = e.target.value.toLowerCase();
+      if(texteSaisi.length > 0){
+        this.arrowIngredients.style.backgroundImage = arrowDown;
+        this.arrowUstensils.style.backgroundImage = arrowDown;
+        this.arrowAppareil.style.backgroundImage = arrowUp;
+        for (let i = 0; i < this.containerFilters.length; i++) {
+          this.deleteAllDomListe(this.containerFilters[i]);
+        }
+        this.addFilters(
+          this.appareil,
+          this.listAppareil,
+          "yellow",
+          this.appareilFiltered,
+          this.arrowAppareil,
+          texteSaisi
+        );
+      }else {
+        console.log('close');
+        this.arrowAppareil.style.backgroundImage = arrowDown;
+        this.deleteAllDomListe(this.listAppareil);
+
+      }
+    });
+    this.inputUstensils.addEventListener("input", (e) => {
+      let texteSaisi = e.target.value.toLowerCase();
+      if(texteSaisi.length > 0){
+        this.arrowIngredients.style.backgroundImage = arrowDown;
+        this.arrowUstensils.style.backgroundImage = arrowUp;
+        this.arrowAppareil.style.backgroundImage = arrowDown;
+        for (let i = 0; i < this.containerFilters.length; i++) {
+          this.deleteAllDomListe(this.containerFilters[i]);
+        }
+        this.addFilters(
+          this.ustensils,
+          this.listUstensils,
+          "red",
+          this.ustensilsFiltered,
+          this.arrowUstensils,
+          texteSaisi
+        );
+      }else {
+        console.log('close');
+        this.arrowUstensils.style.backgroundImage = arrowDown;
+        this.deleteAllDomListe(this.listUstensils);
       }
     });
   }
@@ -191,7 +283,7 @@ export default class Homepage {
     }
   }
 
-  addFilters(tableauDropdown, domToPushLi, color, dropDownFiltered, thisArrow) {
+  addFilters(tableauDropdown, domToPushLi, color, dropDownFiltered, thisArrow, textSaisi) {
     let intermediaire = [];
     if (this.recipesFiltered.length > 0) {
       for (let i = 0; i < this.recipesFiltered.length; i++) {
@@ -233,6 +325,10 @@ export default class Homepage {
       intermediaire = [];
     }
 
+    tableauDropdown= tableauDropdown.filter((name) => { 
+      return name.toLowerCase().includes(textSaisi);
+    })
+
     for (let i = 0; i < tableauDropdown.length; i++) {
       const li = document.createElement("li");
       li.addEventListener("click", (event) => {
@@ -255,10 +351,6 @@ export default class Homepage {
           } else if (color === "red") {
             this.ustensilsFiltered = dropDownFiltered;
           }
-
-          console.log("ingredientsFiltered", this.ingredientsFiltered);
-          console.log("appareilFiltered", this.appareilFiltered);
-          console.log("ustensilsFiltered", this.ustensilsFiltered);
           this.recipesFiltered = this.filtrer(
             this.recipes,
             this.barreRecherche.value,
@@ -294,7 +386,7 @@ export default class Homepage {
             this.ustensilsFiltered
           );
         }
-
+        li.parentElement.parentElement.querySelector('input').value = "";
         this.deleteAllRecipes();
         this.displayFilteredRecipes(this.recipesFiltered);
         thisArrow.style.backgroundImage =
@@ -302,8 +394,10 @@ export default class Homepage {
         this.deleteAllDomListe(domToPushLi);
       });
       li.textContent = tableauDropdown[i];
+
       domToPushLi.appendChild(li);
     }
+
   }
 
   filtrer(tableauRecette, champSaisi, tagIngredient, tagAppareil, tagUstensil) {
