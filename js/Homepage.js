@@ -39,40 +39,39 @@ export default class Homepage {
       let texteSaisi = e.target.value.toLowerCase();
       refresh = true;
       if (texteSaisi.length > 2) {
-        if (this.startFilter) {
+        if (this.startFilter && this.recipesFiltered.length > 0) {
           this.recipesFiltered = this.filtrer(
             this.recipesFiltered,
             texteSaisi,
-            [],
-            [],
-            []
+            this.ingredientsFiltered,
+            this.appareilFiltered,
+            this.ustensilsFiltered
           );
         } else {
+          console.log('test2');
           this.recipesFiltered = this.filtrer(
             this.recipes,
             texteSaisi,
-            [],
-            [],
-            []
+            this.ingredientsFiltered,
+            this.appareilFiltered,
+            this.ustensilsFiltered
           );
         }
 
         if (this.recipesFiltered.length === 0) {
           document.querySelector(".tri__alert").style.display = "block";
-          this.deleteAllRecipes();
+          this.unshowAllRecipes();
         } else {
           document.querySelector(".tri__alert").style.display = "none";
-          this.deleteAllRecipes();
+          this.unshowAllRecipes();
           this.displayFilteredRecipes(this.recipesFiltered);
         }
       } else {
         if (refresh === true && this.startFilter === false) {
           document.querySelector(".tri__alert").style.display = "none";
-          this.deleteAllRecipes();
-          this.displayAllRecipes();
+          this.showAllRecipes();
         } else if (refresh === true && this.startFilter === true) {
           document.querySelector(".tri__alert").style.display = "none";
-          this.deleteAllRecipes();
           this.recipesFiltered = this.filtrer(
             this.recipes,
             [],
@@ -80,6 +79,7 @@ export default class Homepage {
             this.appareilFiltered,
             this.ustensilsFiltered
           );
+          this.unshowAllRecipes();
           this.displayFilteredRecipes(this.recipesFiltered);
         }
       }
@@ -166,7 +166,6 @@ export default class Homepage {
           texteSaisi
         );
       }else {
-        console.log('close');
         this.arrowIngredients.style.backgroundImage = arrowDown;
         this.deleteAllDomListe(this.listIngredients);
       }
@@ -189,7 +188,6 @@ export default class Homepage {
           texteSaisi
         );
       }else {
-        console.log('close');
         this.arrowAppareil.style.backgroundImage = arrowDown;
         this.deleteAllDomListe(this.listAppareil);
 
@@ -213,7 +211,6 @@ export default class Homepage {
           texteSaisi
         );
       }else {
-        console.log('close');
         this.arrowUstensils.style.backgroundImage = arrowDown;
         this.deleteAllDomListe(this.listUstensils);
       }
@@ -262,9 +259,15 @@ export default class Homepage {
       this.containerRecipes.appendChild(this.recipes[i].display());
     }
   }
-  deleteAllRecipes() {
-    while (this.containerRecipes.firstChild) {
-      this.containerRecipes.firstChild.remove();
+  // CHANGED FOR DISPLAY NONE
+  unshowAllRecipes() {
+    for (let i = 0; i < this.containerRecipes.children.length; i++) {
+      this.containerRecipes.children[i].style.display = "none";
+    }
+  }
+  showAllRecipes() {
+    for (let i = 0; i < this.containerRecipes.children.length; i++) {
+      this.containerRecipes.children[i].style.display = "block";
     }
   }
   deleteAllDomListe(domListe) {
@@ -273,8 +276,12 @@ export default class Homepage {
     }
   }
   displayFilteredRecipes(recipesFiltered) {
-    for (let i = 0; i < recipesFiltered.length; i++) {
-      this.containerRecipes.appendChild(recipesFiltered[i].display());
+    for (let i = 0; i < this.containerRecipes.children.length; i++) {
+      for (let j = 0; j < recipesFiltered.length; j++) {
+        if (recipesFiltered[j].name === this.containerRecipes.children[i].querySelector('h2').textContent) {
+          this.containerRecipes.children[i].style.display = "block";
+        }
+      }
     }
   }
   displayFilters(filters) {
@@ -335,14 +342,13 @@ export default class Homepage {
         const div = document.createElement("div");
         const cross = document.createElement("span");
         cross.addEventListener("click", (element) => {
-          this.deleteAllRecipes();
+          this.unshowAllRecipes();
           let index = dropDownFiltered.indexOf(
             element.target.parentElement.textContent
           );
           if (index !== -1) {
             dropDownFiltered.splice(index, 1);
           }
-          console.log(element);
           element.target.parentElement.remove();
           if (color === "blue") {
             this.ingredientsFiltered = dropDownFiltered;
@@ -359,8 +365,6 @@ export default class Homepage {
             this.ustensilsFiltered
           );
           this.displayFilteredRecipes(this.recipesFiltered);
-          console.log("this.recipesFiltered", this.recipesFiltered);
-          console.log("dropDownFiltered", dropDownFiltered);
         });
         div.textContent = event.target.textContent;
         div.classList.add(color);
@@ -387,7 +391,7 @@ export default class Homepage {
           );
         }
         li.parentElement.parentElement.querySelector('input').value = "";
-        this.deleteAllRecipes();
+        this.unshowAllRecipes();
         this.displayFilteredRecipes(this.recipesFiltered);
         thisArrow.style.backgroundImage =
           "url('../images/logos/arrowDown.svg')";
@@ -402,7 +406,6 @@ export default class Homepage {
 
   filtrer(tableauRecette, champSaisi, tagIngredient, tagAppareil, tagUstensil) {
     this.startFilter = true;
-    console.log("tableauRecette", tableauRecette);
     let firstresult = tableauRecette.filter(function (recette) {
       return (
         recette.name.toLowerCase().includes(champSaisi) ||
@@ -447,6 +450,7 @@ export default class Homepage {
         }
       });
     }
+    console.log("firstresult", firstresult);
     return firstresult;
   }
 }
